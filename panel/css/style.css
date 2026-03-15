@@ -1,0 +1,57 @@
+
+BODY {
+background-color: #FFFFCC;
+
+font-family: Arial, Helvetica, Verdana, Tahoma, sans-serif;
+	font-size: 14px;
+}
+input, textarea{
+margin-top:0;
+vertical-align: middle;
+
+}
+
+a {
+      font-size: 12px;
+	font-weight: bold;
+color: #CC6600;
+text-decoration: none;
+}
+td {
+      font-size: 12px;
+	
+}
+div.cont{
+ width:650px;
+ display:block;
+ margin-top:20px;
+}
+.cont:after {
+  content:'';
+  display:block;
+  clear:both;
+}
+div.szt{
+width:100%;
+float:left;
+border: 1px solid silver;
+display: block;
+margin: 2px;
+}
+div.img {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  padding:5px;
+  float:left;
+}
+div.opisy{
+width:500px;
+float:left;
+}
+div.wynik{
+width:200px;
+float:right;
+}
+
+

@@ -1,0 +1,177 @@
+/**
+ * Copyright (c) 2012 Anders Ekdahl (http://coffeescripter.com/)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ *
+ * Version: 1.2.7
+ *
+ * Demo and documentation: http://coffeescripter.com/code/aa-gallery/
+ */
+.aa-gallery {
+  width: 530px;
+}
+.aa-gallery, .aa-gallery * {
+  margin: auto;
+  padding: 0;
+}
+  .aa-gallery .aa-image-wrapper {
+    width: 100%;
+    height: 600px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+    .aa-gallery .aa-image-wrapper .aa-loader {
+      position: absolute;
+      z-index: 10;
+      top: 48%;
+      left: 48%;
+      border: 1px solid #CCC;
+    }
+    .aa-gallery .aa-image-wrapper .aa-next {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 25%;
+      height: 100%;
+      cursor: pointer;
+      display: block;
+      z-index: 200;
+    }
+    .aa-gallery .aa-image-wrapper .aa-prev {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 25%;
+      height: 100%;
+      cursor: pointer;
+      display: block;
+      z-index: 200;
+    }
+    .aa-gallery .aa-image-wrapper .aa-prev, .aa-gallery .aa-image-wrapper .aa-next {
+      /* Or else IE will hide it */
+      background: url(trans.gif);
+    }
+      .aa-gallery .aa-image-wrapper .aa-prev .aa-prev-image, .aa-gallery .aa-image-wrapper .aa-next .aa-next-image {
+        background: url(ad_prev.png);
+        width: 30px;
+        height: 30px;
+        display: none;
+        position: absolute;
+        top: 47%;
+        left: 0;
+        z-index: 101;
+      }
+      .aa-gallery .aa-image-wrapper .aa-next .aa-next-image {
+        background: url(ad_next.png);
+        width: 30px;
+        height: 30px;
+        right: 0;
+        left: auto;
+      }
+    .aa-gallery .aa-image-wrapper .aa-image {
+      position: absolute;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      z-index: 9;
+    }
+      .aa-gallery .aa-image-wrapper .aa-image a img {
+        border: 0;
+      }
+      .aa-gallery .aa-image-wrapper .aa-image .aa-image-description {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        padding: 7px;
+        text-align: left;
+        width: 100%;
+        z-index: 2;
+        background: url(opa75.png);
+        color: #000;
+      }
+      * html .aa-gallery .aa-image-wrapper .aa-image .aa-image-description {
+        background: none;
+        filter:progid:DXImageTransform.Microsoft.AlphaImageLoader (enabled=true, sizingMethod=scale, src='opa75.png');
+      }
+        .aa-gallery .aa-image-wrapper .aa-image .aa-image-description .aa-description-title {
+          display: block;
+        }
+  .aa-gallery .aa-controls {
+    height: 20px;
+  }
+    .aa-gallery .aa-info {
+      float: left;
+    }
+    .aa-gallery .aa-slideshow-controls {
+      float: right;
+    }
+      .aa-gallery .aa-slideshow-controls .aa-slideshow-start, .aa-gallery .aa-slideshow-controls .aa-slideshow-stop {
+        padding-left: 5px;
+        cursor: pointer;
+      }
+      .aa-gallery .aa-slideshow-controls .aa-slideshow-countdown {
+        padding-left: 5px;
+        font-size: 0.9em;
+      }
+    .aa-gallery .aa-slideshow-running .aa-slideshow-start {
+      cursor: default;
+      font-style: italic;
+    }
+  .aa-gallery .aa-nav {
+    width: 100%;
+    position: relative;
+  }
+    .aa-gallery .aa-forward, .aa-gallery .aa-back {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      z-index: 10;
+    }
+    /* IE 6 doesn't like height: 100% */
+    * html .aa-gallery .aa-forward, .aa-gallery .aa-back {
+      height: 100px;
+    }
+    .aa-gallery .aa-back {
+      cursor: pointer;
+      left: -20px;
+      width: 13px;
+      display: block;
+      background: url(ad_scroll_back.png) 0px 22px no-repeat;
+    }
+    .aa-gallery .aa-forward {
+      cursor: pointer;
+      display: block;
+      right: -20px;
+      width: 13px;
+      background: url(ad_scroll_forward.png) 0px 22px no-repeat;
+    }
+    .aa-gallery .aa-nav .aa-thumbs {
+      overflow: hidden;
+      width: 100%;
+    }
+      .aa-gallery .aa-thumbs .aa-thumb-list {
+        float: left;
+        width: 9000px;
+        list-style: none;
+      }
+        .aa-gallery .aa-thumbs li {
+          float: left;
+          padding-right: 5px;
+        }
+          .aa-gallery .aa-thumbs li a {
+            display: block;
+          }
+            .aa-gallery .aa-thumbs li a img {
+              border: 3px solid #CCC;
+              display: block;
+            }
+            .aa-gallery .aa-thumbs li a.aa-active img {
+              border: 3px solid #616161;
+            }
+/* Can't do display none, since Opera won't load the images then */
+.aa-preloads {
+  position: absolute;
+  left: -9000px;
+  top: -9000px;
+}

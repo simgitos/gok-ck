@@ -1,0 +1,14 @@
+RewriteEngine on
+RewriteBase /
+
+RewriteRule ^blog-([0-9]+)$ /index.php?blog=$1 [L]
+
+
+RewriteRule ^([a-z0-9_.-]+)-n-([0-9]*).html$ /index.php?news=$2 [L]
+RewriteRule ^([a-z0-9_-]+).html$ /index.php?name=$1 [L]
+RewriteRule ^index-([0-9]+).html$ /index.php?page=$1 [L]
+
+
+
+
+
