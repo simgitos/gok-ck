@@ -34,7 +34,8 @@ if ($_GET['cmd'] == 'news') {
         edit_news($_GET['id']);
 } elseif ($_GET['cmd'] == 'update') {
         update_news();
-} else news();
+} else
+        news();
 
 
 //------------------------------------------------//
@@ -54,7 +55,7 @@ function add_news()
 {
         global $db, $news_table;
 
-        $db->query("INSERT INTO $news_table (title_news, date_added, od) VALUES(?, NOW(), NOW())", $_POST['name']);
+        $db->query("INSERT INTO $news_table (title_news, date_added, od, data_wydarzenia) VALUES(?, NOW(), NOW(), NOW())", $_POST['name']);
 
         $idn = $db->lastInsertID();
         edit_news($idn);
@@ -88,15 +89,21 @@ function update_news()
                 echo 'Nie wypełniłeś wymaganych pól<br>[<a href="javascript:history.back(1)">wstecz</a>]';
                 exit;
         } else {
-                if ($db->query(
-                        "UPDATE $news_table SET title_news=?, text_news=?, od=?, do=?, galery_news=? WHERE id=?",
-                        $_POST['title_news'],
-                        $_POST['text_news'],
-                        $_POST['od'],
-                        $_POST['do'],
-                        $_POST['galery_news'],
-                        $_POST['id']
-                )) {
+                if (
+                        $db->query(
+                                "UPDATE $news_table SET title_news=?, text_news=?, od=?, do=?, galery_news=?, kategoria=?, tagi=?,  data_wydarzenia=? WHERE id=?",
+                                $_POST['title_news'],
+                                $_POST['text_news'],
+                                $_POST['od'],
+                                $_POST['do'],
+                                $_POST['galery_news'],
+                                $_POST['kategoria'],
+                                $_POST['tagi'],
+                                $_POST['data_wydarzenia'],
+                                $_POST['id']
+
+                        )
+                ) {
 
                         $_SESSION['alert'] = 'Poprawnie zapisano posta';
                         header("Location: newsy.php");
@@ -137,8 +144,8 @@ function dodaj_miniaturke()
 
                 echo '<br />Zdjęcie załadowano poprawnie <br /><br />';
 
-                
-                        $max_szer = $_width_min_;
+
+                $max_szer = $_width_min_;
 
 
                 $stary = "../temp/$fid";
@@ -183,8 +190,8 @@ function usun_miniaturke()
 
 
         if (unlink('../pliki/miniaturki/news-' . $_GET['id_strony'] . '.jpg'))
-       
-        $_SESSION['alert'] = 'Usunięto miniaturkę'; 
+
+                $_SESSION['alert'] = 'Usunięto miniaturkę';
         header("Location: newsy.php");
         exit();
 }
@@ -230,8 +237,8 @@ function del_news()
 
         if ($db->query("DELETE FROM $news_table WHERE id=? LIMIT 1", $_GET['id'])) {
                 unlink('../pliki/miniaturki/news-' . $_GET['id'] . '.jpg');
-                
-                $_SESSION['alert'] = 'Poprawnie usunięto posta'; 
+
+                $_SESSION['alert'] = 'Poprawnie usunięto posta';
                 header("Location: newsy.php");
                 exit();
         }

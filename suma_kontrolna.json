@@ -1,11 +1,12 @@
 {
+    ".gitignore": "b6ebf5ee13ff02d8b396f1c68602d9209a8284f88f5ca7ce001ed1ae4beb50d1",
     ".htaccess": "7853f88ccf314eeabc0f3f91d5700489b4efd510e56f6f99877e8492b1bc86d5",
     "Db.php": "d9942bf554296a1c8af189e1728d6a6ed45bfe3782ecd09d19ac64bdcdc79904",
     "chk.php": "a34f09dbc8cc4b096b91bbcf07b5fdbb75159e11125c31442fd8b28209cf66a2",
-    "config.php": "bfac2c4555ccf379fbf569ee98704751b1dafe35b9ae8a80564acfdcc1d04071",
+    "config.php": "e41fb958248f11a593c372a39a5fa012eddd66178ba23c01666838f9c4e4880e",
     "funkcje.php": "516fb11075cabfdeab9a977691ed5ef655accbfaa154522111446041a792b11c",
     "index.php": "14d764efd77b2ee3e5f46a17076c2ca5ef605c4549fd33bc744b0267009b025a",
     "main.php": "1effe97661895f1f006d1603df95d4feacc1d036b74457f91a75f3bb75996c69",
     "style2.css": "31f38948b220870c56db6053d54450c780bf2d3a5174b20c1875ff487e273d68",
-    "suma_kontrolna.json": "b28c1b51817f6a582fe255241f8fcec9c110cae6653d30ecefe49c0690ed7943"
+    "suma_kontrolna.json": "b8c267df0d5f8333c4bde03da67b3bae5e1d5d36a937198585361aafb5d655bc"
 }
