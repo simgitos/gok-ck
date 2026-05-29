@@ -15,7 +15,145 @@ if (!empty($_GET['name'])) {
 }
 
 
-function show_meta() {}
+function show_meta()
+{
+}
+
+
+function calendar()
+{
+	global $db, $news_table;
+
+	// Pobranie parametrów roku i miesiąca z GET (z fallbackiem do bieżącego)
+	$year = isset($_GET['cal_year']) ? (int) $_GET['cal_year'] : (int) date('Y');
+	$month = isset($_GET['cal_month']) ? (int) $_GET['cal_month'] : (int) date('n');
+
+	// Zakres bezpieczeństwa dla miesięcy
+	if ($month < 1) {
+		$month = 12;
+		$year--;
+	}
+	if ($month > 12) {
+		$month = 1;
+		$year++;
+	}
+
+	// Pobranie filtrów z GET
+	$selected_kat = isset($_GET['cal_kat']) ? trim($_GET['cal_kat']) : '';
+	$selected_tag = isset($_GET['cal_tag']) ? trim($_GET['cal_tag']) : '';
+
+	// Pobranie unikalnych kategorii z bazy
+	$kategorie_rows = $db->query("SELECT DISTINCT kategoria FROM $news_table WHERE kategoria != '' AND kategoria IS NOT NULL ORDER BY kategoria ASC")->fetchAll();
+	$all_kategorie = array_column($kategorie_rows, 'kategoria');
+
+	// Pobranie unikalnych tagów z bazy
+	$tagi_rows = $db->query("SELECT tagi FROM $news_table WHERE tagi != '' AND tagi IS NOT NULL")->fetchAll();
+	$all_tags = [];
+	foreach ($tagi_rows as $row) {
+		$exploded = explode(',', $row['tagi']);
+		foreach ($exploded as $t) {
+			$trimmed = trim($t);
+			if ($trimmed !== '' && !in_array($trimmed, $all_tags)) {
+				$all_tags[] = $trimmed;
+			}
+		}
+	}
+	sort($all_tags);
+
+	// Budowanie zapytania SQL na wydarzenia w wybranym miesiącu na podstawie data_wydarzenia
+	$sql = "SELECT id, title_news, kategoria, tagi, data_wydarzenia FROM $news_table WHERE YEAR(data_wydarzenia) = ? AND MONTH(data_wydarzenia) = ?";
+	$params = [$year, $month];
+
+	if ($selected_kat !== '') {
+		$sql .= " AND kategoria = ?";
+		$params[] = $selected_kat;
+	}
+
+	if ($selected_tag !== '') {
+		$sql .= " AND (tagi LIKE ? OR tagi = ?)";
+		$params[] = '%' . $selected_tag . '%';
+		$params[] = $selected_tag;
+	}
+
+	// Wykonanie zapytania
+	$events = $db->query($sql, $params)->fetchAll();
+
+	// Grupowanie wydarzeń po dniach na podstawie data_wydarzenia
+	$events_by_day = [];
+	foreach ($events as $event) {
+		$day = (int) date('j', strtotime($event['data_wydarzenia']));
+		$events_by_day[$day][] = $event;
+	}
+
+	// Obliczenia kalendarza
+	$days_in_month = (int) date('t', mktime(0, 0, 0, $month, 1, $year));
+	$first_day_of_week = (int) date('N', mktime(0, 0, 0, $month, 1, $year));
+
+	$polish_months = [
+		1 => 'Styczeń',
+		2 => 'Luty',
+		3 => 'Marzec',
+		4 => 'Kwiecień',
+		5 => 'Maj',
+		6 => 'Czerwiec',
+		7 => 'Lipiec',
+		8 => 'Sierpień',
+		9 => 'Wrzesień',
+		10 => 'Październik',
+		11 => 'Listopad',
+		12 => 'Grudzień'
+	];
+	$month_name = $polish_months[$month];
+
+	// Obliczenia dla nawigacji
+	$prev_month = $month - 1;
+	$prev_year = $year;
+	if ($prev_month < 1) {
+		$prev_month = 12;
+		$prev_year--;
+	}
+
+	$next_month = $month + 1;
+	$next_year = $year;
+	if ($next_month > 12) {
+		$next_month = 1;
+		$next_year++;
+	}
+
+	// Zachowywanie innych parametrów URL przy generowaniu linków
+	$buildUrl = function ($changes) {
+		$params = $_GET;
+		foreach ($changes as $key => $val) {
+			if ($val === null) {
+				unset($params[$key]);
+			} else {
+				$params[$key] = $val;
+			}
+		}
+		return 'index.php?' . http_build_query($params);
+	};
+
+	// Dane dzisiejszej daty
+	$today_d = (int) date('j');
+	$today_m = (int) date('n');
+	$today_y = (int) date('Y');
+
+	// Przygotowanie siatki
+	$grid = [];
+	for ($i = 1; $i < $first_day_of_week; $i++) {
+		$grid[] = null;
+	}
+	for ($d = 1; $d <= $days_in_month; $d++) {
+		$grid[] = $d;
+	}
+	while (count($grid) % 7 !== 0) {
+		$grid[] = null;
+	}
+	$weeks = array_chunk($grid, 7);
+
+	include('views/modules/calendar.php');
+
+}
 
 function fullslider()
 {
@@ -49,7 +187,7 @@ function news($news)
 
 function show_gal($dir = '')
 {
-	global  $db, $img_table;
+	global $db, $img_table;
 
 	$images = $db->query("SELECT * FROM $img_table WHERE dir=? ORDER BY pos ASC", $dir)->fetchAll();
 
