@@ -179,9 +179,14 @@ include('funkcje.php');
                         } else {
 
                             strony('index');
-                            last_post();
-                            // calendar();
+                            // home();
                         
+
+
+                            last_post();
+
+
+
                         }
                         //}
                         ?>
