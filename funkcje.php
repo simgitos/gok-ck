@@ -15,38 +15,44 @@ if (!empty($_GET['name'])) {
 }
 
 
-function home()
+function flash()
 {
 	global $db, $news_table;
 	// 1. Pobranie danych z bazy
 	// Szybkie wiadomości (flash)
 	$flash_news = $db->query("SELECT * FROM $news_table WHERE kategoria = 'flash' ORDER BY od DESC LIMIT 3")->fetchAll();
+	include('views/modules/flash.php');
+}
 
-	// Najbliższe wydarzenia (przyszłe lub najnowsze jako fallback)
-	$upcoming_events = $db->query("SELECT * FROM $news_table WHERE data_wydarzenia >= CURDATE() ORDER BY data_wydarzenia ASC LIMIT 3")->fetchAll();
-	if (count($upcoming_events) < 3) {
-		$exclude_ids = array_column($upcoming_events, 'id');
-		$needed = 3 - count($upcoming_events);
-		if (!empty($exclude_ids)) {
-			$extra_events = $db->query("SELECT * FROM $news_table WHERE id NOT IN (" . implode(',', $exclude_ids) . ") ORDER BY od DESC LIMIT $needed")->fetchAll();
-		} else {
-			$extra_events = $db->query("SELECT * FROM $news_table ORDER BY od DESC LIMIT 3")->fetchAll();
-		}
-		$upcoming_events = array_merge($upcoming_events, $extra_events);
-	}
+function home()
+{
+	global $db, $news_table;
+	
+	// Wszystkie wydarzenia do kalendarza (zarówno przyszłe, jak i przeszłe)
+	$upcoming_events = $db->query("SELECT * FROM $news_table WHERE data_wydarzenia IS NOT NULL AND data_wydarzenia != '0000-00-00' AND (kategoria != 'flash' OR kategoria IS NULL) ORDER BY data_wydarzenia ASC")->fetchAll();
+	// if (count($upcoming_events) < 3) {
+	// 	$exclude_ids = array_column($upcoming_events, 'id');
+	// 	$needed = 3 - count($upcoming_events);
+	// 	if (!empty($exclude_ids)) {
+	// 		$extra_events = $db->query("SELECT * FROM $news_table WHERE id NOT IN (" . implode(',', $exclude_ids) . ") ORDER BY od DESC LIMIT $needed")->fetchAll();
+	// 	} else {
+	// 		$extra_events = $db->query("SELECT * FROM $news_table ORDER BY od DESC LIMIT 3")->fetchAll();
+	// 	}
+	// 	$upcoming_events = array_merge($upcoming_events, $extra_events);
+	// }
 
 	// Relacje z wydarzeń (wpisy z galeriami)
-	$event_relations = $db->query("SELECT * FROM $news_table WHERE galery_news != '' AND galery_news IS NOT NULL ORDER BY od DESC LIMIT 3")->fetchAll();
-	if (count($event_relations) < 3) {
-		$exclude_ids = array_column($event_relations, 'id');
-		$needed = 3 - count($event_relations);
-		if (!empty($exclude_ids)) {
-			$extra_relations = $db->query("SELECT * FROM $news_table WHERE id NOT IN (" . implode(',', $exclude_ids) . ") ORDER BY od DESC LIMIT $needed")->fetchAll();
-		} else {
-			$extra_relations = $db->query("SELECT * FROM $news_table ORDER BY od DESC LIMIT 3")->fetchAll();
-		}
-		$event_relations = array_merge($event_relations, $extra_relations);
-	}
+	$event_relations = $db->query("SELECT * FROM $news_table WHERE (data_wydarzenia < CURDATE() OR data_wydarzenia IS NULL) AND kategoria = '' ORDER BY data_wydarzenia DESC, id DESC LIMIT 3")->fetchAll();
+	// if (count($event_relations) < 3) {
+	// 	$exclude_ids = array_column($event_relations, 'id');
+	// 	$needed = 3 - count($event_relations);
+	// 	if (!empty($exclude_ids)) {
+	// 		$extra_relations = $db->query("SELECT * FROM $news_table WHERE id NOT IN (" . implode(',', $exclude_ids) . ") ORDER BY od DESC LIMIT $needed")->fetchAll();
+	// 	} else {
+	// 		$extra_relations = $db->query("SELECT * FROM $news_table ORDER BY od DESC LIMIT 3")->fetchAll();
+	// 	}
+	// 	$event_relations = array_merge($event_relations, $extra_relations);
+	// }
 
 	include('views/modules/home.php');
 

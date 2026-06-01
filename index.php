@@ -75,14 +75,13 @@ include('funkcje.php');
     </header>
     <main>
 
-
-
         <?
 
         if (empty($_GET['name']) && empty($_GET['news']) && empty($_GET['blog'])):
-
+            flash();
             fullslider(); ?>
-            <section id="oddzialy" class="pasek bg-dark">
+            <?php home(); ?>
+            <!-- <section id="oddzialy" class="pasek bg-dark">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8 text-light">
@@ -155,52 +154,55 @@ include('funkcje.php');
 
                     </div>
                 </div>
-            </section>
+            </section> -->
         <?php else: ?>
             <section id="top" class=" bg-dark py-4">
                 &nbsp;
+            </section>
+            
+            <div class="row">
+
+                <div class="col-md-8 p-5">
+                    <?
+                    if (isset($_GET['name'])) {
+                        strony($_GET['name']);
+                    } elseif (isset($_GET['news'])) {
+                        news($_GET['news']);
+                    } elseif (isset($_GET['blog'])) {
+                        blog($_GET['blog']);
+                    } else {
+
+
+
+
+
+
+                        last_post();
+
+
+
+                    }
+                    //}
+                    ?>
+
+
+
+
                 </div>
+                <div class="content col-md-4 bg-light p-3 border pt-5 ">
+
+                    <? sidebar() ?>
+                </div>
+            </div>
             </section>
         <? endif; ?>
 
 
-        <section id="main">
+        <!-- <section id="main">
             <div class="container">
-                <div class="row">
-
-                    <div class="col-md-8 p-5">
-                        <?
-                        if (isset($_GET['name'])) {
-                            strony($_GET['name']);
-                        } elseif (isset($_GET['news'])) {
-                            news($_GET['news']);
-                        } elseif (isset($_GET['blog'])) {
-                            blog($_GET['blog']);
-                        } else {
-
-                            strony('index');
-                            // home();
-                        
-
-
-                            last_post();
-
-
-
-                        }
-                        //}
-                        ?>
-
-
-
-
-                    </div>
-                    <div class="content col-md-4 bg-light p-3 border pt-5 ">
-                        <? sidebar() ?>
-                    </div>
-                </div>
+                
             </div>
-        </section>
+        </section> -->
 
 
 
